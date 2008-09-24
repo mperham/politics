@@ -16,6 +16,15 @@ Given a set of identical daemons on the local network, come to a common consensu
 a choice.  Example TBD.
 
 
+= Requirements
+
+Uses Scott Barron's AASM library http://github.com/rubyist/aasm/tree/master for state machine functionality.
+Please install the gem like so:
+
+sudo gem sources -a http://gems.github.com
+sudo gem install rubyist-aasm -v 2.0.2
+
+
 = Author
 
 Name::    Mike Perham
