@@ -15,21 +15,22 @@ for fault tolerance.  This introduces the problem of coordination between those 
 Specifically, how do you keep those processes from stepping on each other's electronic
 toes?  There are several answers:
 
-1) Break the processing into several parts.  Have an individual process "checkout" a part,
-work on it, and then return the part for processing.  See BucketWorker mixin.
-
-2) Elect a leader for a short period of time.  The leader is the process which performs the
-actual processing.  After a length of time, a new leader is elected from the group.  See
-the TokenWorker and PaxosMember mixins.
+1. Break the processing into several parts.  Have an individual process "checkout" a part,
+   work on it, and then return the part for processing.  See +BucketWorker+ mixin.
+1. Elect a leader for a short period of time.  The leader is the process which performs the
+   actual processing.  After a length of time, a new leader is elected from the group.  See
+   the +TokenWorker+ and +PaxosMember+ mixins.
 
 
 = Author
 
-Name::    Mike Perham
-Email::   mailto:mperham@gmail.com
-Twitter:: http://twitter.com/mperham
+Name::      Mike Perham
+Email::     mailto:mperham@gmail.com
+Twitter::   http://twitter.com/mperham
 
-This software is free for you to use as you'd like.  If you find it useful, please consider giving me a recommendation at http://workingwithrails.com/person/10797-mike-perham
+This software is free for you to use as you'd like.  If you find it useful, please consider giving 
+me a recommendation at {Working with Rails}[http://workingwithrails.com/person/10797-mike-perham].
+
 
 = License
 
