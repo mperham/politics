@@ -1,28 +1,26 @@
-= Algorithms for Distributed Processing
+= Politics
 
-Contains a set of algorithms commonly used for solving distributed processing problems, as
-specified in _Distributed Computing_ by Hagit Attiya, Jennifer Welch.
+Politics is a Ruby library providing utilities and algorithms for solving common distributed
+computing problems.  Distributed Computing and Politics have a number of things in common:
+1) they can be beautiful in theory but get really ugly in reality; 2) after working with
+either for a few weeks/months/years (depending on your moral flexibility) you'll find yourself
+intellectually devoid, a hollow shell of a man/woman/cybernetic killing machine.
 
+So the name is to be taken tongue in cheek.  Onto the real details.
 
-== Leader Election in an Anonymous Cloud
+== Common Problems in Distributed Computing
 
-Given a set of identical daemons on the local network, elect one and only one of them "leader".
-This is useful for providing fault tolerance while at the same time ensuring that the daemons
-can coordinate their processing through the leader.
+Ruby services are often deployed as a cloud of many processes across several machines, 
+for fault tolerance.  This introduces the problem of coordination between those processes.
+Specifically, how do you keep those processes from stepping on each other's electronic
+toes?  There are several answers:
 
-== Fault Tolerant Consensus
+1) Break the processing into several parts.  Have an individual process "checkout" a part,
+work on it, and then return the part for processing.  See BucketWorker mixin.
 
-Given a set of identical daemons on the local network, come to a common consensus regarding
-a choice.  Example TBD.
-
-
-= Requirements
-
-Uses Scott Barron's AASM library http://github.com/rubyist/aasm/tree/master for state machine functionality.
-Please install the gem like so:
-
-sudo gem sources -a http://gems.github.com
-sudo gem install rubyist-aasm -v 2.0.2
+2) Elect a leader for a short period of time.  The leader is the process which performs the
+actual processing.  After a length of time, a new leader is elected from the group.  See
+the TokenWorker and PaxosMember mixins.
 
 
 = Author
