@@ -1,12 +1,10 @@
 require 'socket'
 require 'ipaddr'
 require 'uri'
+require 'drb'
 
-# For MDNSSD
 require 'net/dns/mdns-sd'
-# To make Resolv aware of mDNS
 require 'net/dns/resolv-mdns'
-# To make TCPSocket use Resolv, not the C library resolver.
 require 'net/dns/resolv-replace'
 
 =begin
@@ -35,84 +33,55 @@ module Politics
   # The replicas then run the Multi-Paxos algorithm to provide consensus on a given
   # replica set.  The algorithm is robust in the face of crash failures, but not
   # Byzantine failures.
-	class DiscoverableNode
-	  
-    # include PluginAWeek::StateMachine
+	module DiscoverableNode
 	  
 	  attr_accessor :group
 	  attr_accessor :coordinator
-	  attr_accessor :latest_sequence_number
-	  
-    # state_machine :group do
-    #   event :join do
-    #     transition :to => :active, :from => :proposed
-    #       end
-    #       
-    #       event :invited do
-    #     transition :to => :active, :from => :lone    
-    #       end
-    #     end
-    
-    def initialize
-      self.recent_sequence_number = 0
-      self.coordinator = nil
-    end
-    
-    def next_sequence_number
-      weight + recent_sequence_number
-    end
-    
-    
-    def propose(value = next_sequence_number)
-      promises = []
-      replicas.each do |peer|
-        promises << peer.proposal(rid, value)
-      end
-    end
-    
-    def proposal(peer, value)
-      # Respond to a value proposal with a promise 
-      if value > latest_sequence_number
-        coordinator, latest_sequence_number = peer, value
-      end
-      [coordinator, latest_sequence_number]
-    end
-    
-    
 	  
 		def register(group='foo')
 		  self.group = group
 		  start_drb
 		  register_with_bonjour(group)
-		  Politics.log "Registered #{self} in group #{service} with weight #{weight}"
-		  sleep 1
-		  find_replicas
+		  Politics.log "Registered #{self} in group #{group} with RID #{rid}"
+		  sleep 0.5
+		  find_replicas(0)
 		end
 		
     def replicas
-      @replicas ||= []
+      @replicas ||= {}
     end
     
-    def find_replicas
-		  replicas.clear
+    def find_replicas(count)
+      replicas.clear if count % 5 == 0
+      return if count > 10 # Guaranteed to terminate, but not successfully :-(
 
       puts "Finding replicas"
-      # We need to wait for the network to stablize so we repeat 
-      # the replica check once per second until the # of replicas
-      # does not change.
-      while true
-        current_replicas = []
-        bonjour_scan do |replica|
-          begin
-            current_replicas[replica] = replica.weight
-          rescue => e
-          end
+      peer_set = []
+      bonjour_scan do |replica|
+        (his_rid, his_peers) = replica.hello(rid)
+        unless replicas.has_key?(his_rid)
+          replicas[his_rid] = replica
         end
-        if replicas.size == current_replicas.size
-          break
+        his_peers.each do |peer|
+          peer_set << peer unless peer_set.include? peer
         end
       end
+      p [peer_set.sort, replicas.keys.sort]
+      if peer_set.sort != replicas.keys.sort
+        # Recursively call ourselves until the network has settled down and all
+        # peers have reached agreement on the peer group membership.
+        sleep 0.2
+        find_replicas(count + 1)
+      end
+      puts "Found #{replicas.size} peers: #{replicas.keys.sort.inspect}"
       replicas
+    end
+    
+    # Called for one peer to introduce itself to another peer.  The caller
+    # sends his RID, the responder sends his RID and his list of current peer
+    # RIDs.
+    def hello(remote_rid)
+      [rid, replicas.keys]
     end
     
 	  # A process's Replica ID is its PID + a random 16-bit value.  We don't want
@@ -127,8 +96,8 @@ module Politics
 		
 		def register_with_bonjour(group)
 		  # Register our DRb server with Bonjour.
-      handle = Net::DNS::MDNSSD.register("#{group}-#{ip}-#{$$}", 
-          "_#{group}._paxos._tcp", 'local', port)
+      handle = Net::DNS::MDNSSD.register("#{self.group}-#{local_ip}-#{$$}", 
+          "_#{self.group}._tcp", 'local', @port)
           
       ['INT', 'TERM'].each { |signal| 
         trap(signal) { handle.stop }
@@ -137,6 +106,7 @@ module Politics
 		
 		def start_drb
 		  server = DRb.start_service(nil, self)
+		  @port = URI.parse(DRb.uri).port
       ['INT', 'TERM'].each { |signal| 
         trap(signal) { server.stop_service }
       }
@@ -151,17 +121,17 @@ module Politics
         end
       end
 	  end
-
-    def cloud_size
-      replicas.size
-    end
-
-		def vote
-		  @votes += 1
-	  end
-
-		def leader?
-		  @leader = @votes == replicas.size
-	  end
+	  
+    # http://coderrr.wordpress.com/2008/05/28/get-your-local-ip-address/
+    def local_ip
+      orig, Socket.do_not_reverse_lookup = Socket.do_not_reverse_lookup, true # turn off reverse DNS resolution temporarily
+ 
+      UDPSocket.open do |s|
+        s.connect '64.233.187.99', 1
+        IPAddr.new(s.addr.last).to_i
+      end
+    ensure
+      Socket.do_not_reverse_lookup = orig
+    end	  
   end
 end
