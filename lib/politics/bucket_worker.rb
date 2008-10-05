@@ -1,4 +1,9 @@
-require 'starling'
+begin
+  require 'starling'
+rescue LoadError => e
+  puts "Unable to load starling, please run `sudo gem install starling`: #{e.message}"
+  exit(1)
+end
 
 module Politics
   
@@ -28,7 +33,7 @@ module Politics
   #    end
   #
   #    def master?
-  #      # TODO Add your own logic here to demarcate a 'master' process
+  #      # TODO Add your own logic here to denote a 'master' process
   #      ARGV.include? '-m'
   #    end
   #  end
@@ -67,6 +72,8 @@ module Politics
     # Once processing has completed, it will put the bucket back onto the queue for processing
     # by a BucketWorker again, possibly immediately, depending on the number of buckets vs
     # number of workers.
+    #
+    # +bucket+::            The bucket number to process, within the range 0...TOTAL_BUCKETS
     def process_bucket
       raise ArgumentError, "process_bucket requires a block!" unless block_given?
       raise ArgumentError, "You must call register_worker before processing!" unless starling_client
