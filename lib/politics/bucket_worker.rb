@@ -20,7 +20,7 @@ module Politics
   # Example usage:
   #
   #  class Analyzer
-  #    include BucketWorker
+  #    include Politics::BucketWorker
   #    TOTAL_BUCKETS = 16
   #
   #    def start

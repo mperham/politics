@@ -1,5 +1,5 @@
 module Politics
   module Version
-    STRING = "0.9.9"
+    STRING = "0.1.0"
   end
 end

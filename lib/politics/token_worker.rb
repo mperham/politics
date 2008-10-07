@@ -23,7 +23,7 @@ module Politics
   #
   # Example usage:
   #  class Analyzer
-  #    include TokenWorker
+  #    include Politics::TokenWorker
   #
   #    def initialize
   #      register_worker 'analyzer', :iteration_length => 120, :servers => ['localhost:11211']
