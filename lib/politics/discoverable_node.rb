@@ -55,7 +55,7 @@ module Politics
       replicas.clear if count % 5 == 0
       return if count > 10 # Guaranteed to terminate, but not successfully :-(
 
-      puts "Finding replicas"
+      #puts "Finding replicas"
       peer_set = []
       bonjour_scan do |replica|
         (his_rid, his_peers) = replica.hello(rid)
@@ -66,14 +66,14 @@ module Politics
           peer_set << peer unless peer_set.include? peer
         end
       end
-      p [peer_set.sort, replicas.keys.sort]
+      #p [peer_set.sort, replicas.keys.sort]
       if peer_set.sort != replicas.keys.sort
         # Recursively call ourselves until the network has settled down and all
         # peers have reached agreement on the peer group membership.
         sleep 0.2
         find_replicas(count + 1)
       end
-      puts "Found #{replicas.size} peers: #{replicas.keys.sort.inspect}"
+      puts "Found #{replicas.size} peers: #{replicas.keys.sort.inspect}" if count == 0
       replicas
     end
     

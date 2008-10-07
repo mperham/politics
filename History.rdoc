@@ -1,0 +1,5 @@
+= Changelog
+
+== 0.1 (2008-10-07)
+
+* Add BucketWorker and TokenWorker mixins.

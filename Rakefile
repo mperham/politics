@@ -24,4 +24,11 @@ Rake::TestTask.new do |t|
 	t.test_files = FileList['test/*_test.rb']
 end
 
+desc "Create rdoc"
+Rake::RDocTask.new do |rd|
+	rd.main = "README.rdoc"
+	rd.rdoc_files.include("README.rdoc", "History.rdoc", "lib/**/*.rb")
+end
+
+
 task :default => :test
