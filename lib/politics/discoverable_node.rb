@@ -42,7 +42,7 @@ module Politics
 		  self.group = group
 		  start_drb
 		  register_with_bonjour(group)
-		  Politics.log "Registered #{self} in group #{group} with RID #{rid}"
+		  Politics::log.info { "Registered #{self} in group #{group} with RID #{rid}" }
 		  sleep 0.5
 		  find_replicas(0)
 		end
@@ -73,7 +73,7 @@ module Politics
         sleep 0.2
         find_replicas(count + 1)
       end
-      puts "Found #{replicas.size} peers: #{replicas.keys.sort.inspect}" if count == 0
+      Politics::log.info { "Found #{replicas.size} peers: #{replicas.keys.sort.inspect}" } if count == 0
       replicas
     end
     

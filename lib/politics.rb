@@ -1,9 +1,12 @@
 require 'logger'
 
 module Politics
-  LOG = Logger.new(STDOUT)
+
+  def self.log=(value)
+    @log = log
+  end
   
-  def self.log(msg)
-    LOG.info(msg)
+  def self.log
+    @log ||= Logger.new(STDOUT)
   end
 end

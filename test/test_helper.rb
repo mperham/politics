@@ -15,4 +15,4 @@ rescue LoadError => e
 end
 
 require File.dirname(__FILE__) + '/../lib/init'
-Politics::LOG.level = Logger::WARN
+Politics::log.level = Logger::WARN

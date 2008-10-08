@@ -90,7 +90,7 @@ module Politics
 
         time = 0
         if leader?
-          LOG.info { "I've been elected leader: #{worker_name}" }
+          Politics::log.info { "#{worker_name} elected leader at #{Time.now}" }
           # If we are the master worker, do the work.
           time = time_for do
             result = block.call(*args)
