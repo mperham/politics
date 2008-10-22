@@ -15,9 +15,9 @@ for fault tolerance.  This introduces the problem of coordination between those 
 Specifically, how do you keep those processes from stepping on each other's electronic
 toes?  There are several answers:
 
-1. Break the processing into several parts.  Have an individual process "checkout" a part,
-   work on it, and then return the part for processing.  This is a very scalable solution
-   as it allows N workers to work on the same task concurrently.  See the +BucketWorker+ mixin.
+1. Break the processing into N 'buckets'.  Have an individual process fetch a bucket,
+   work on it, and ask for another.  This is a very scalable solution as it allows N workers 
+   to work on different parts of the same task concurrently.  See the +StaticQueueWorker+ mixin.
 1. Elect a leader for a short period of time.  The leader is the process which performs the
    actual processing.  After a length of time, a new leader is elected from the group.  This
    is fault tolerant but not as scalable, as only one process is performing the task at a given
@@ -25,8 +25,13 @@ toes?  There are several answers:
 
 == Dependencies
 
-The BucketWorker mixin uses the Starling queue server as the mechanism to hand out parts.  The
-TokenWorker mixin uses the memcached server as the mechanism to elect a leader.
+StaticQueueWorker mixin
+* memcached - the mechanism to elect a leader amongst a set of peers.
+* DRb - the mechanism to communicate between peers.
+* mDNS - the mechanism to discover peers.
+
+TokenWorker mixin
+* memcached - the mechanism to elect a leader amongst a set of peers.
 
 
 = Author

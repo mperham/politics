@@ -1,5 +1,9 @@
 = Changelog
 
+== 0.2.0 (2008-10-??)
+
+* Remove BucketWorker based on initial feedback.  Add StaticQueueWorker as a more reliable replacement.
+
 == 0.1.0 (2008-10-07)
 
 * Add BucketWorker and TokenWorker mixins.
