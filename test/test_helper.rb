@@ -14,5 +14,6 @@ rescue LoadError => e
   puts "Please install mocha: `sudo gem install mocha`"
 end
 
+$:.unshift(File.dirname(__FILE__) + '/../lib')
 require File.dirname(__FILE__) + '/../lib/init'
-Politics::log.level = Logger::WARN
+#Politics::log.level = Logger::WARN

@@ -98,10 +98,15 @@ module Politics
         end
         
         pause_until_expiry(time)
+        reset_state
       end while loop?
     end
 
     private
+    
+    def reset_state
+      @leader = nil
+    end
     
     def verify_registration
       unless self.class.worker_instance
@@ -118,7 +123,7 @@ module Politics
     
     def cleanup
       at_exit do
-        memcache_client.delete(token)
+        memcache_client.delete(token) if leader?
       end
     end
     
@@ -144,8 +149,10 @@ module Politics
     # Check to see if we are leader by looking at the process name
     # associated with the token.
     def leader?
-      master_worker = memcache_client.get(token)
-      worker_name == master_worker
+      @leader ||= begin
+        master_worker = memcache_client.get(token)
+        worker_name == master_worker
+      end
     end
 
     # Easy to mock or monkey-patch if another MemCache client is preferred.
