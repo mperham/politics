@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
 	s.name = "politics"
-	s.version = "0.1.0"
+	s.version = "0.2.0"
 	s.authors = "Mike Perham"
 	s.email = "mperham@gmail.com"
 	s.homepage = "http://github.com/mperham/politics/"
@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
 	s.rdoc_options = ["--quiet", "--title", "Politics documentation", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source"]
 	s.extra_rdoc_files = ["README.rdoc", "History.rdoc", "LICENSE"]
 
-	s.add_dependency 'fiveruns-memcache-client'
-	s.add_dependency 'fiveruns-starling'
+	s.add_dependency 'fiveruns-memcache-client', '>=1.5.0.3'
+	s.add_dependency 'starling-starling', '>=0.9.8'
+	s.add_dependency 'net-mdns', '>=0.4'
 end

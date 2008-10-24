@@ -96,7 +96,7 @@ module Politics
         if leader?
           # Drb thread handles leader duties
           log.info { "#{@uri} has been elected leader" }
-          sleep until_next_iteration
+          relax until_next_iteration
           initialize_buckets          
         else
           # Get a bucket from the leader and process it
@@ -104,7 +104,7 @@ module Politics
             bucket_process(*leader.bucket_request, &block)
           rescue DRb::DRbError => dre
             log.error { "Error talking to leader: #{dre.message}" }
-            sleep until_next_iteration
+            relax until_next_iteration
           end
         end
       end while loop?
@@ -129,7 +129,7 @@ module Politics
       when :not_leader
         # Uh oh, race condition?  Invalid any local cache and check again
         log.warn { "Recv'd NOT_LEADER from peer." }
-        sleep 1
+        relax 1
         @leader_uri = nil
       else
         log.info { "#{@uri} is processing #{bucket}"}
@@ -156,7 +156,7 @@ module Politics
       while replicas.empty? or repl == nil
         repl = replicas.detect { |replica| replica.__drburi == name }
         unless repl
-          sleep 1
+          relax 1
           bonjour_scan do |replica|
             replicas << replica
           end
@@ -206,9 +206,7 @@ module Politics
     end
 
     def leader_uri
-      @leader_uri ||= begin
-        @memcache_client.get(token)
-      end
+      @leader_uri ||= @memcache_client.get(token)
     end
     
     # Check to see if we are leader by looking at the process name
