@@ -1,3 +1,4 @@
+examples/queue_worker_example.rb
 examples/token_worker_example.rb
 History.rdoc
 lib/init.rb
@@ -11,7 +12,6 @@ Manifest
 politics.gemspec
 Rakefile
 README.rdoc
-test/bucket_worker_test.rb
 test/static_queue_worker_test.rb
 test/test_helper.rb
 test/token_worker_test.rb

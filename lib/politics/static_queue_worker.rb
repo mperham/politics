@@ -78,7 +78,6 @@ module Politics
       @bucket_count = bucket_count
       initialize_buckets
 
-		  start_drb
 		  register_with_bonjour
 		  
 		  log.info { "Registered #{self} in group #{group_name} at port #{@port}" }
@@ -228,21 +227,19 @@ module Politics
     
     
 		def register_with_bonjour
+		  server = DRb.start_service(nil, self)
+		  @uri = DRb.uri
+		  @port = URI.parse(DRb.uri).port
+
 		  # Register our DRb server with Bonjour.
       handle = Net::DNS::MDNSSD.register("#{self.group_name}-#{local_ip}-#{$$}", 
           "_#{group_name}._tcp", 'local', @port)
           
       ['INT', 'TERM'].each { |signal| 
-        trap(signal) { handle.stop }
-      }
-	  end
-		
-		def start_drb
-		  server = DRb.start_service(nil, self)
-		  @uri = DRb.uri
-		  @port = URI.parse(DRb.uri).port
-      ['INT', 'TERM'].each { |signal| 
-        trap(signal) { server.stop_service }
+        trap(signal) do
+          handle.stop
+          server.stop_service
+        end
       }
 	  end
 		

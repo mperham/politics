@@ -9,11 +9,11 @@ Gem::Specification.new do |s|
 
 	s.require_path = 'lib'
 
-	# get this easily and accurately by running 'Dir.glob("{lib,test}/**/*")'
+	# get this easily and accurately by running 'Dir.glob("{lib,examples}/**/*")'
 	# in an IRB session.  However, GitHub won't allow that command hence
 	# we spell it out.
-	s.files = ["README.rdoc", "LICENSE", "History.rdoc", "Rakefile", "lib/init.rb", "lib/politics", "lib/politics/bucket_worker.rb", "lib/politics/discoverable_node.rb", "lib/politics/token_worker.rb", "lib/politics/version.rb", "lib/politics.rb"]
-	s.test_files = ["test/bucket_worker_test.rb", "test/political_test.rb", "test/test_helper.rb", "test/token_worker_test.rb"]
+	s.files = ["lib/init.rb", "lib/politics", "lib/politics/discoverable_node.rb", "lib/politics/static_queue_worker.rb", "lib/politics/token_worker.rb", "lib/politics/version.rb", "lib/politics.rb", "examples/queue_worker_example.rb", "examples/token_worker_example.rb"]
+	s.test_files = ["test/static_queue_worker_test.rb", "test/test_helper.rb", "test/token_worker_test.rb"]
 	s.has_rdoc = true
 	s.rdoc_options = ["--quiet", "--title", "Politics documentation", "--opname", "index.html", "--line-numbers", "--main", "README.rdoc", "--inline-source"]
 	s.extra_rdoc_files = ["README.rdoc", "History.rdoc", "LICENSE"]
