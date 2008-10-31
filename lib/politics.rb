@@ -1,5 +1,3 @@
-require 'logger'
-
 module Politics
 
   def self.log=(value)
@@ -7,6 +5,11 @@ module Politics
   end
   
   def self.log
-    @log ||= Logger.new(STDOUT)
+    @log ||= if defined?(RAILS_DEFAULT_LOGGER)
+      RAILS_DEFAULT_LOGGER
+    else
+      require 'logger'
+      Logger.new(STDOUT)
+    end
   end
 end

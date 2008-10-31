@@ -1,4 +1,3 @@
-puts 'hello'
 require 'socket'
 require 'ipaddr'
 require 'uri'
@@ -235,12 +234,12 @@ module Politics
       handle = Net::DNS::MDNSSD.register("#{self.group_name}-#{local_ip}-#{$$}", 
           "_#{group_name}._tcp", 'local', @port)
           
-      ['INT', 'TERM'].each { |signal| 
-        trap(signal) do
-          handle.stop
-          server.stop_service
-        end
-      }
+      # ['INT', 'TERM'].each { |signal| 
+      #   trap(signal) do
+      #     handle.stop
+      #     server.stop_service
+      #   end
+      # }
 	  end
 		
 		def bonjour_scan

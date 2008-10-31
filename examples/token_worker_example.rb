@@ -4,15 +4,15 @@ require 'politics/token_worker'
 
 # Test this example by starting memcached locally and then in two irb sessions, run this:
 #
-#
-# You can then watch as one of them is elected leader.  You can kill the leader and verify
-# the backup process is elected after approximately iteration_length seconds.
-#
 =begin
  require 'token_worker_example'
  p = Politics::TokenWorkerExample.new
  p.start
 =end
+#
+# You can then watch as one of them is elected leader.  You can kill the leader and verify
+# the backup process is elected after approximately iteration_length seconds.
+#
 module Politics
   class TokenWorkerExample
     include Politics::TokenWorker
