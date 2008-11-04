@@ -21,7 +21,7 @@ toes?  There are several answers:
 1. Elect a leader for a short period of time.  The leader is the process which performs the
    actual processing.  After a length of time, a new leader is elected from the group.  This
    is fault tolerant but not as scalable, as only one process is performing the task at a given
-   point in time.  See the +TokenWorker+ and +PaxosMember+ mixins.
+   point in time.  See the +TokenWorker+ mixin.
 
 == Dependencies
 
@@ -39,6 +39,7 @@ TokenWorker mixin
 Name::      Mike Perham
 Email::     mailto:mperham@gmail.com
 Twitter::   http://twitter.com/mperham
+Homepage::  http://mikeperham.com/politics/
 
 This software is free for you to use as you'd like.  If you find it useful, please consider giving 
 me a recommendation at {Working with Rails}[http://workingwithrails.com/person/10797-mike-perham].
