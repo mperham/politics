@@ -23,6 +23,10 @@ toes?  There are several answers:
    is fault tolerant but not as scalable, as only one process is performing the task at a given
    point in time.  See the +TokenWorker+ mixin.
 
+== Installation
+
+  sudo gem install mperham-politics -s http://gems.github.com
+
 == Dependencies
 
 StaticQueueWorker mixin
@@ -39,7 +43,7 @@ TokenWorker mixin
 Name::      Mike Perham
 Email::     mailto:mperham@gmail.com
 Twitter::   http://twitter.com/mperham
-Homepage::  http://mikeperham.com/politics/
+Homepage::  http://mikeperham.com/
 
 This software is free for you to use as you'd like.  If you find it useful, please consider giving 
 me a recommendation at {Working with Rails}[http://workingwithrails.com/person/10797-mike-perham].
