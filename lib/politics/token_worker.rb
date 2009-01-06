@@ -143,16 +143,14 @@ module Politics
     # Nominate ourself as leader by contacting the memcached server
     # and attempting to add the token with our name attached.
     def nominate
-      memcache_client.add(token, worker_name, iteration_length)
+      result = memcache_client.add(token, worker_name, iteration_length)
+      @leader = (result == 'STORED')
     end
 
     # Check to see if we are leader by looking at the process name
     # associated with the token.
     def leader?
-      @leader ||= begin
-        master_worker = memcache_client.get(token)
-        worker_name == master_worker
-      end
+      @leader
     end
 
     # Easy to mock or monkey-patch if another MemCache client is preferred.
