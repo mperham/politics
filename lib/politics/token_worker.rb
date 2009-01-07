@@ -142,13 +142,13 @@ module Politics
     
     # Nominate ourself as leader by contacting the memcached server
     # and attempting to add the token with our name attached.
+    # The result will tell us if memcached stored our value and therefore
+    # if we are now leader.
     def nominate
       result = memcache_client.add(token, worker_name, iteration_length)
       @leader = (result == 'STORED')
     end
 
-    # Check to see if we are leader by looking at the process name
-    # associated with the token.
     def leader?
       @leader
     end
