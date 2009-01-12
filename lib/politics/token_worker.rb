@@ -146,7 +146,7 @@ module Politics
     # if we are now leader.
     def nominate
       result = memcache_client.add(token, worker_name, iteration_length)
-      @leader = (result == 'STORED')
+      @leader = (result =~ /\ASTORED/)
     end
 
     def leader?
