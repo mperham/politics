@@ -1,5 +1,9 @@
 = Changelog
 
+== 0.2.3 (2009-01-12)
+
+* FIx invalid result check in previous change. (Brian Dainton)
+
 == 0.2.2 (2009-01-07)
 
 * Fix invalid leader? logic in TokenWorker which could allow
