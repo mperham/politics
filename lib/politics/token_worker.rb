@@ -145,7 +145,7 @@ module Politics
     # The result will tell us if memcached stored our value and therefore
     # if we are now leader.
     def nominate
-      result = memcache_client.add(token, worker_name, iteration_length)
+      result = memcache_client.add(token, worker_name, (iteration_length * 0.9).to_i)
       @leader = (result =~ /\ASTORED/)
     end
 

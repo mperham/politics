@@ -1,8 +1,12 @@
 = Changelog
 
+== 0.2.4 (2009-01-28)
+
+* Reduce leader token expiration time to discourage a get/set race condition. (Brian Dainton)
+
 == 0.2.3 (2009-01-12)
 
-* FIx invalid result check in previous change. (Brian Dainton)
+* Fix invalid result check in previous change. (Brian Dainton)
 
 == 0.2.2 (2009-01-07)
 
