@@ -86,15 +86,22 @@ module Politics
         # If another process got there first, this is a noop.
         # We add an expiry so that the master token will constantly
         # need to be refreshed (in case the current leader dies).
-        nominate
-
         time = 0
-        if leader?
-          Politics::log.info { "#{worker_name} elected leader at #{Time.now}" }
-          # If we are the master worker, do the work.
-          time = time_for do
-            result = block.call(*args)
+        begin
+          nominate
+
+          if leader?
+            Politics::log.info { "#{worker_name} elected leader at #{Time.now}" }
+            # If we are the master worker, do the work.
+            time = time_for do
+              result = block.call(*args)
+            end
           end
+        rescue MemCache::MemCacheError => me
+          Politics::log.error("Error from memcached, pausing until the next iteration...")
+          Politics::log.error(me.message)
+          Politics::log.error(me.backtrace.join("\n"))
+          self.memcache_client.reset
         end
         
         pause_until_expiry(time)
