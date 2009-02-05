@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
-	s.name = "politics"
-	s.version = "0.2.4"
+	s.name = "mperham-politics"
+	s.version = "0.2.5"
 	s.authors = "Mike Perham"
 	s.email = "mperham@gmail.com"
 	s.homepage = "http://github.com/mperham/politics/"

@@ -34,6 +34,17 @@ class TokenWorkerTest < Test::Unit::TestCase
       end
     end
 
+    should 'handle unexpected MemCache errors' do
+      @worker.expects(:nominate)
+      @worker.expects(:leader?).raises(MemCache::MemCacheError)
+      Politics::log.expects(:error).times(3)
+
+      @worker.register_worker('testing')
+      @worker.process do
+        assert false
+      end
+    end
+
     should 'process if they are leader' do
       @worker.expects(:nominate)
       @worker.expects(:leader?).returns(true)

@@ -1,5 +1,9 @@
 = Changelog
 
+== 0.2.5 (2009-02-04)
+
+* Gracefully handle MemCache::MemCacheErrors.  Just sleep until memcached comes back.
+
 == 0.2.4 (2009-01-28)
 
 * Reduce leader token expiration time to discourage a get/set race condition. (Brian Dainton)
